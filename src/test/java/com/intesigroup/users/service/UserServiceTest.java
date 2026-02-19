@@ -20,7 +20,7 @@ class UserServiceTest {
     public void getAllUsersShouldReturnTheListOfUsers()  {
         UserRepository mockUserRepository = mock(UserRepository.class);
         UserService underTest = new UserService(mockUserRepository);
-        List<User> userList = List.of(User.builder().email("email").build());
+        List<User> userList = List.of(User.builder().email("email@email.com").build());
 
         when(mockUserRepository.findAll()).thenReturn(userList);
 
@@ -34,7 +34,7 @@ class UserServiceTest {
     public void getUserByEmailShouldReturnTheUserIfThereIsAnExistingEmail()  {
         UserRepository mockUserRepository = mock(UserRepository.class);
         UserService underTest = new UserService(mockUserRepository);
-        String email = "email";
+        String email = "email@email.com";
         User user = User.builder().email(email).build();
 
         when(mockUserRepository.findById(eq(email))).thenReturn(Optional.ofNullable(user));
@@ -51,14 +51,14 @@ class UserServiceTest {
 
         when(mockUserRepository.findById(any())).thenReturn(Optional.empty());
         assertThrows(ResponseStatusException.class,
-                ()-> underTest.getUserByMail("email"));
+                ()-> underTest.getUserByMail("email@email.com"));
     }
 
     @Test
     public void addUserShouldReturnTheAddedUser()  {
         UserRepository mockUserRepository = mock(UserRepository.class);
         UserService underTest = new UserService(mockUserRepository);
-        String email = "email";
+        String email = "email@email.com";
         User user = User.builder().email(email).build();
 
         when(mockUserRepository.save(any())).thenReturn(user);
@@ -72,7 +72,7 @@ class UserServiceTest {
     public void updateUserShouldReturnTheUpdatedUser()  {
         UserRepository mockUserRepository = mock(UserRepository.class);
         UserService underTest = new UserService(mockUserRepository);
-        String email = "email";
+        String email = "email@email.com";
         User user = User.builder().email(email).build();
 
         when(mockUserRepository.save(any())).thenReturn(user);

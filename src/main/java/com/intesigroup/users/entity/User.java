@@ -1,8 +1,8 @@
 package com.intesigroup.users.entity;
 
-import com.intesigroup.users.enums.RoleType;
 import jakarta.persistence.*;
-import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +18,8 @@ import java.util.List;
 @Table(name = "users")
 public class User {
     @Id
+    @Email
+    @NotBlank
     String email;
     String username;
     String name;

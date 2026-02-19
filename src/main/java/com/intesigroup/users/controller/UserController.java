@@ -2,10 +2,9 @@ package com.intesigroup.users.controller;
 
 import com.intesigroup.users.entity.User;
 import com.intesigroup.users.service.UserService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -16,7 +15,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public User addUser(@RequestBody User user) {
+    public User addUser(@RequestBody @Valid User user) {
         return userService.addUser(user);
     }
 
@@ -31,7 +30,7 @@ public class UserController {
     }
 
     @PutMapping
-    public User updateUser(@RequestParam("email") String email, @RequestBody User user) {
+    public User updateUser(@RequestParam("email") String email, @RequestBody @Valid User user) {
         return userService.updateUser(email, user);
     }
 

@@ -32,7 +32,7 @@ public class UserServiceIntegrationTest {
     @Test
     public void addUserShouldSuccessfullyCreateTheUser() {
         List<Role> roleList = List.of(Role.builder().roleType(RoleType.OWNER).build(), Role.builder().roleType(RoleType.OPERATOR).build());
-        String email = "email";
+        String email = "email@email.com";
         User user = User.builder().email(email).roleList(roleList).build();
         underTest.addUser(user);
 
@@ -51,12 +51,12 @@ public class UserServiceIntegrationTest {
     @Test
     public void getUserByMailShouldReturnAnExceptionIfNotExisting() {
         assertThrows(ResponseStatusException.class,
-                ()-> underTest.getUserByMail("email"));
+                ()-> underTest.getUserByMail("email@email.com"));
     }
 
     @Test
     public void getUserByMailShouldReturnTheUserIfFound() {
-        String email = "email";
+        String email = "email@email.com";
         User user = User.builder().email(email).build();
         userRepository.save(user);
 
@@ -68,8 +68,8 @@ public class UserServiceIntegrationTest {
 
     @Test
     public void getAllUsersShouldReturnTheCorrectUsersList() {
-        userRepository.save(User.builder().email("email").build());
-        userRepository.save(User.builder().email("email2").build());
+        userRepository.save(User.builder().email("email@email.com").build());
+        userRepository.save(User.builder().email("email2@email.com").build());
 
         List<User> retrievedUsers = underTest.getAllUsers();
 
@@ -80,8 +80,8 @@ public class UserServiceIntegrationTest {
     @Test
     public void updateUserShouldCorrectlyUpdateJustTheInputUser() {
         List<Role> roleList = List.of(Role.builder().roleType(RoleType.OWNER).build(), Role.builder().roleType(RoleType.OPERATOR).build());
-        User firstUser = User.builder().email("email").name("name").surname("surname").username("username").roleList(roleList).build();
-        User secondUser = User.builder().email("email2").name("name2").surname("surname2").username("username2").roleList(roleList).build();
+        User firstUser = User.builder().email("email@email.com").name("name").surname("surname").username("username").roleList(roleList).build();
+        User secondUser = User.builder().email("email2@email.com").name("name2").surname("surname2").username("username2").roleList(roleList).build();
         userRepository.save(firstUser);
         userRepository.save(secondUser);
 
@@ -106,14 +106,14 @@ public class UserServiceIntegrationTest {
 
     @Test
     public void deleteUserShouldRemoveOnlyTheInputUser() {
-        userRepository.save(User.builder().email("email").build());
-        userRepository.save(User.builder().email("email2").build());
+        userRepository.save(User.builder().email("email@email.com").build());
+        userRepository.save(User.builder().email("email2@email.com").build());
 
-        underTest.deleteUserByEmail("email");
+        underTest.deleteUserByEmail("email@email.com");
 
         List<User> userList = userRepository.findAll();
 
         assertEquals(1, userList.size());
-        assertEquals("email2", userList.get(0).getEmail());
+        assertEquals("email2@email.com", userList.get(0).getEmail());
     }
 }
