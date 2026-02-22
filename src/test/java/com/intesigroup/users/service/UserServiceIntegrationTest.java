@@ -6,8 +6,10 @@ import com.intesigroup.users.enums.RoleType;
 import com.intesigroup.users.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -23,6 +25,9 @@ public class UserServiceIntegrationTest {
 
     @Autowired
     UserRepository userRepository;
+
+    @MockitoBean
+    RabbitTemplate mockRabbitTemplate;
 
     @BeforeEach
     public void cleanup() {

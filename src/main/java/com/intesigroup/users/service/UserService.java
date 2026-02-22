@@ -5,6 +5,7 @@ import com.intesigroup.users.entity.User;
 import com.intesigroup.users.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -17,6 +18,7 @@ import java.util.List;
 public class UserService {
 
     private UserRepository userRepository;
+    private RabbitTemplate rabbitTemplate;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -27,6 +29,7 @@ public class UserService {
     }
 
     public User addUser(User user) {
+        rabbitTemplate.convertAndSend("users.exchange", "users.created", "User " + user.getEmail() + " created");
         return userRepository.save(user);
     }
 
