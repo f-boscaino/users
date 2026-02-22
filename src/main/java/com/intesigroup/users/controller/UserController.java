@@ -1,42 +1,43 @@
 package com.intesigroup.users.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.intesigroup.users.entity.User;
-import com.intesigroup.users.service.UserService;
+import com.intesigroup.users.service.UserWithAuthService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController("/user")
 @AllArgsConstructor
 public class UserController {
 
-    private UserService userService;
+    private UserWithAuthService userWithAuthService;
 
     @PostMapping
     public User addUser(@RequestBody @Valid User user) {
-        return userService.addUser(user);
+        return userWithAuthService.addUser(user);
     }
 
     @GetMapping("/all")
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public String getAllUsers(@AuthenticationPrincipal Jwt jwt) throws JsonProcessingException {
+        return userWithAuthService.getAllUsers(jwt);
     }
 
+
     @GetMapping
-    public User getUserByEmail(@RequestParam("email") String email) {
-        return userService.getUserByMail(email);
+    public String getUserByEmail(@RequestParam("email") String email, @AuthenticationPrincipal Jwt jwt) throws JsonProcessingException {
+        return userWithAuthService.getUserByEmail(email, jwt);
     }
 
     @PutMapping
     public User updateUser(@RequestParam("email") String email, @RequestBody @Valid User user) {
-        return userService.updateUser(email, user);
+        return userWithAuthService.updateUser(email, user);
     }
 
     @DeleteMapping
-    public void updateUser(@RequestParam("email") String email) {
-        userService.deleteUserByEmail(email);
+    public void deleteUser(@RequestParam("email") String email) {
+        userWithAuthService.deleteUserByEmail(email);
     }
-
 }
